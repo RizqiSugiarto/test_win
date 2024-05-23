@@ -2,12 +2,9 @@ import {
   CreateUserRepository,
   UpdateUserRepository,
   GetByEmailUserRepository,
-  GetByIdProductRepository,
-  DeleteUserRepository,
 } from "../../../data/protocols";
 import {
   AddAccount,
-  DeleteAccount,
   GetAccountByEmail,
   GetAccountById,
   UpdateAccount,
@@ -18,8 +15,7 @@ export class UserRepository
   implements
     CreateUserRepository,
     UpdateUserRepository,
-    GetByEmailUserRepository,
-    DeleteUserRepository
+    GetByEmailUserRepository
 {
   // Implementasi fungsi untuk membuat akun pengguna baru
   createUser = async (
@@ -33,8 +29,8 @@ export class UserRepository
       data: params,
     });
     return { id: user.id };
-  };
-
+  }
+  
   // Implementasi fungsi untuk memperbarui informasi pengguna
   updateUser = async (
     params: UpdateUserRepository.Params,
@@ -84,7 +80,7 @@ export class UserRepository
 
   // Implementasi fungsi untuk mendapatkan informasi pengguna berdasarkan ID
   getById = async (
-    param: GetByIdProductRepository.Params,
+    param: GetAccountById.Params,
   ): Promise<GetAccountById.Result | null> => {
     const userCollection = prismaClient.getConnection().users;
     const user = await userCollection.findUnique({
@@ -104,19 +100,5 @@ export class UserRepository
     }
     // Jika pengguna tidak ditemukan, kembalikan null
     return null;
-  };
-
-  // Implementasi fungsi untuk menghapus akun pengguna
-  deleteUser = async (
-    params: DeleteAccount.Params,
-  ): Promise<DeleteAccount.Result> => {
-    const userCollection = prismaClient.getConnection().users;
-    await userCollection.delete({
-      where: { id: params.id },
-    });
-    // Mengembalikan ID pengguna yang dihapus
-    return {
-      id: params.id,
-    };
-  };
+  }
 }

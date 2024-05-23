@@ -5,7 +5,6 @@ import {
   makeDbCreateProductController,
   makeDbUpdateProductController,
   makeDbGetAllProductController,
-  makeDbGetByIdProductController,
   makeDbDeleteProductController,
 } from "../factories/controller";
 import { auth } from "../middlewares/auth";
@@ -24,10 +23,6 @@ productsRoute.get(
   "/products",
   auth,
   expressRouterAdapter(makeDbGetAllProductController()),
-);
-productsRoute.get(
-  "/products/:id",
-  expressRouterAdapter(makeDbGetByIdProductController()),
 );
 productsRoute.delete(
   "/products/:id",

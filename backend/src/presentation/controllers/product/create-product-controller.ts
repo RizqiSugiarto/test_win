@@ -9,7 +9,6 @@ export class CreateProductController implements Controller {
   handle = async (
     request: CreateProductController.Request,
   ): Promise<HttpResponse<any>> => {
-    console.log(request, "GINI");
     try {
       const createProduct = request;
       const requiredFields =
@@ -23,7 +22,6 @@ export class CreateProductController implements Controller {
       const getResult = await this.addProduct.perform(createProduct);
       return HttpHelper.CREATED({ productId: getResult.id });
     } catch (error) {
-      console.log(error, "GINIHH");
       return HttpHelper.INTERNAL_SERVER_ERROR(error as Error);
     }
   };

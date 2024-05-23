@@ -4,7 +4,6 @@ import {
     updateProduct,
     deleteProduct,
     getAllProduct,
-    getByIdProduct,
 } from './productApi'
 
 // Definisikan state awal untuk slice produk

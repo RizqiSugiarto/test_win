@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createUser, updateUser, getByIdUser, deleteUser } from './userApi';
+import { createUser, updateUser, getByIdUser} from './userApi';
 import { IUser } from '../../models/users';
 
 interface UserState {
@@ -78,23 +78,6 @@ export const userSlice = createSlice({
             // Penanganan gagal mendapatkan pengguna berdasarkan ID
             state.isLoading = false;
             state.error = action.error.message || 'Gagal mengambil pengguna';
-        });
-
-        // Penanganan deleteUser
-        builder.addCase(deleteUser.pending, (state) => {
-            // Menandai sedang memuat saat menghapus pengguna
-            state.isLoading = true;
-            state.error = null;
-        });
-        builder.addCase(deleteUser.fulfilled, (state, action: PayloadAction<string>) => {
-            // Penanganan berhasil menghapus pengguna
-            state.isLoading = false;
-            state.users = state.users.filter((user) => user.id !== action.payload);
-        });
-        builder.addCase(deleteUser.rejected, (state, action) => {
-            // Penanganan gagal menghapus pengguna
-            state.isLoading = false;
-            state.error = action.error.message || 'Gagal menghapus pengguna';
         });
     },
 });

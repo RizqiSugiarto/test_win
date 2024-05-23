@@ -8,7 +8,6 @@ export class GetUserByIdController implements Controller {
   handle = async (
     request: GetUserByIdController.Request,
   ): Promise<HttpResponse<any>> => {
-    console.log(request, "PARAMETER CTRL USERID");
     try {
       const getUserById = request;
       const requiredField = getUserById.id;

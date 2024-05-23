@@ -8,9 +8,7 @@ export class AuthMiddleware implements Middleware {
 
   async handle(request: AuthMiddleware.Request): Promise<HttpResponse<any>> {
     try {
-      console.log(request, "GINI");
       const { authorization } = request;
-      console.log(authorization, "KETANGKEP KOK");
       if (authorization) {
         const cleanedToken = CleanJwtToken.cleanToken(authorization);
         const account = await this.loadAccountByToken.load(cleanedToken);

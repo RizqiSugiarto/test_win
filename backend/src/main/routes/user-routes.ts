@@ -5,8 +5,6 @@ import { auth } from "../middlewares/auth";
 import {
   makeDbCreateUserController,
   makeDbUpdateUserController,
-  makeDbGetByEmailUserController,
-  makeDbDeleteUserController,
   makeLoginUserController,
   makeDbGetByIdUserController,
 } from "../factories/controller";
@@ -28,15 +26,7 @@ usersRoute.get(
   auth,
   expressRouterAdapter(makeDbGetByIdUserController()),
 );
-usersRoute.get(
-  "/users/:email",
-  auth,
-  expressRouterAdapter(makeDbGetByEmailUserController()),
-);
-usersRoute.delete(
-  "/users/:id",
-  auth,
-  expressRouterAdapter(makeDbDeleteUserController()),
-);
+
+
 
 export { usersRoute };

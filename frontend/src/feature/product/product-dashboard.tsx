@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import ProductCard from './Component/product-card';
+import ProductCard from '../../components/product-card';
 import { IProduct } from '../../models/product';
 import { IUser } from '../../models/users';
 import Cookies from 'js-cookie';
@@ -13,9 +13,9 @@ import {
 } from './productApi';
 import { getByIdUser } from '../user';
 import { RootState, AppDispatch } from '../../store/store';
-import ProductForm from './Component/product-form';
+import ProductForm from '../../components/product-form';
 import { NewProduct } from '../../models/product';
-import Forbidden from './Component/forbidden-resource';
+import Forbidden from '../../components/forbidden-resource';
 import { jwtDecode } from 'jwt-decode';
 import { TokenStructure } from '../../models/auth';
 
@@ -51,7 +51,7 @@ export const ProductDashboard: React.FC = () => {
     // Mendapatkan token dari cookie
     const token = Cookies.get('accessToken');
 
-    // Efek samping untuk mendapatkan daftar produk saat komponen dimount, serta informasi pengguna saat ini
+    //  untuk mendapatkan daftar produk saat komponen dimount, serta informasi pengguna saat ini
     useEffect(() => {
         if (token) {
             dispatch(getAllProduct());
@@ -60,7 +60,7 @@ export const ProductDashboard: React.FC = () => {
         }
     }, [dispatch, token]);
 
-    // Efek samping untuk memperbarui daftar produk saat aksi pembuatan atau pembaruan berhasil
+    //  untuk memperbarui daftar produk saat 
     useEffect(() => {
         if (success) {
             dispatch(getAllProduct());

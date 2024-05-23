@@ -43,18 +43,6 @@ export const getAllProduct = createAsyncThunk(
     },
 );
 
-// Fungsi asynchronous untuk mendapatkan produk berdasarkan ID
-export const getByIdProduct = createAsyncThunk(
-    'product/getById',
-    async (productId: string) => {
-        try {
-            const response = await API.get(`products/${productId}`); // Mengirim permintaan GET ke endpoint 'products/{id}' untuk mendapatkan produk berdasarkan ID
-            return response.data; // Mengembalikan data produk yang sesuai dengan ID dari respons server
-        } catch (error) {
-            console.log(error); // Menangani kesalahan jika ada
-        }
-    },
-);
 
 // Fungsi asynchronous untuk menghapus produk berdasarkan ID
 export const deleteProduct = createAsyncThunk(

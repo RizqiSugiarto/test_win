@@ -38,13 +38,4 @@ export const getByIdUser = createAsyncThunk('users/getById', async (userId: stri
     }
 });
 
-// Tindakan asinkron untuk menghapus pengguna berdasarkan ID
-export const deleteUser = createAsyncThunk('users/delete', async (userId: string) => {
-    try {
-        // Kirim permintaan DELETE untuk menghapus pengguna berdasarkan ID
-        const response = await API.delete(`users/${userId}`);
-        return response.data; // Kembalikan data respons dari server
-    } catch (error) {
-        console.log(error); // Tangani kesalahan jika ada
-    }
-});
+

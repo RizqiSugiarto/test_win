@@ -2,14 +2,12 @@ import {
   CreateProductRepository,
   UpdateProductRepository,
   GetAllProductRepository,
-  GetByIdProductRepository,
   DeleteProductRepository,
 } from "../../../data/protocols";
 import {
   AddProduct,
   DeleteProduct,
   GetAllProduct,
-  GetByIdProduct,
   UpdateProduct,
 } from "../../../domain/use-cases";
 import { prismaClient } from "../prisma-client";
@@ -19,7 +17,6 @@ export class ProductRepository
     CreateProductRepository,
     UpdateProductRepository,
     GetAllProductRepository,
-    GetByIdProductRepository,
     DeleteProductRepository
 {
   // Implementasi fungsi untuk membuat produk baru
@@ -76,30 +73,6 @@ export class ProductRepository
       created_at: product.created_at,
       updated_at: product.updated_at,
     }));
-  };
-
-  // Implementasi fungsi untuk mendapatkan produk berdasarkan ID
-  getByIdProduct = async (
-    params: GetByIdProductRepository.Params,
-  ): Promise<GetByIdProduct.Result | null> => {
-    const prodCollection = prismaClient.getConnection().product;
-    const product = await prodCollection.findUnique({
-      where: { id: params.id },
-    });
-    if (product) {
-      // Jika produk ditemukan, mengembalikan data produk
-      return {
-        id: product.id,
-        nameProduct: product.nameProduct,
-        price: product.price,
-        photoProduct: product.photoProduct,
-        description: product.description,
-        created_at: product.created_at,
-        updated_at: product.updated_at,
-      };
-    }
-    // Jika produk tidak ditemukan, mengembalikan null
-    return null;
   };
 
   // Implementasi fungsi untuk menghapus produk

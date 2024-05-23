@@ -4,23 +4,24 @@ import { getByIdUser, updateUser } from './userApi';
 import { RootState, AppDispatch } from '../../store/store';
 import { IUser } from '../../models/users';
 import Cookies from 'js-cookie';
-import { jwtDecode } from 'jwt-decode'; // Impor jwtDecode dari paket jwt-decode
+import { jwtDecode } from 'jwt-decode'; 
 import { TokenStructure } from '../../models/auth';
+import Forbidden from '../../components/forbidden-resource';
 
 export const ProfilePage: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const user = useSelector((state: RootState) => state.users.selectedUser); // Pilih pengguna dari toko Redux
-    const isLoading = useSelector((state: RootState) => state.users.isLoading); // Pilih status pengambilan dari toko Redux
+    const user = useSelector((state: RootState) => state.users.selectedUser); // Pilih pengguna dari store Redux
+    const isLoading = useSelector((state: RootState) => state.users.isLoading); // Pilih status pengambilan dari store Redux
     const [updatedUser, setUpdatedUser] = useState<IUser | null>(null); // State untuk data pengguna yang diperbarui
 
-    const token = Cookies.get('accessToken'); // Dapatkan token akses dari kuki
+    const token = Cookies.get('accessToken'); // Dapatkan token akses dari cookie
 
     useEffect(() => {
         // Ambil data pengguna saat komponen dipasang atau token berubah
         if (token) {
             const decodedToken = jwtDecode<TokenStructure>(token); // Mendekode token untuk mendapatkan id pengguna
             dispatch(getByIdUser(decodedToken.id)); // Meneruskan tindakan untuk mendapatkan data pengguna berdasarkan id
-        }
+        } 
     }, [dispatch, token]);
 
     useEffect(() => {
@@ -48,6 +49,10 @@ export const ProfilePage: React.FC = () => {
             dispatch(updateUser(updatedUser)); // Meneruskan tindakan untuk memperbarui data pengguna
         }
     };
+
+    if(!token) {
+        return <Forbidden/>
+    }
 
     return (
         <div className="container mx-auto p-4">
