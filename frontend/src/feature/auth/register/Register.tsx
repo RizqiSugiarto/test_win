@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'; 
 import { createUser } from './registerApi';
-import { RootState, AppDispatch } from '../../../store/store'
+import { RootState, AppDispatch } from '../../../store/store';
 
 export const RegisterForm: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+
+  // Memanggil state isLoading dan error dari store menggunakan useSelector
   const isLoading = useSelector((state: RootState) => state.users.isLoading);
   const error = useSelector((state: RootState) => state.users.error);
-  const navigate = useNavigate(); // Move this outside of the conditional rendering
+
+  const navigate = useNavigate(); // Penggunaan hook useNavigate diluar dari kondisional rendering
 
   const [form, setForm] = useState({
     name: '',
@@ -29,11 +32,10 @@ export const RegisterForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await dispatch(createUser(form)); // Dispatch the createUser action with form data
-    navigate("/");
+    // Dispatch aksi createUser dengan data formulir
+    await dispatch(createUser(form));
+    navigate("/"); // Navigasi kembali ke halaman awal setelah pendaftaran berhasil
   };
-
- 
 
   return (
     <div className="bg-gray-100 h-screen flex items-center justify-center">
@@ -41,6 +43,7 @@ export const RegisterForm: React.FC = () => {
         <div className="mx-auto text-center mb-6">
           <h1 className="text-2xl font-bold text-indigo-800">REGISTER FORM</h1>
         </div>
+        {/* Menampilkan pesan kesalahan jika ada */}
         {error && <div className="text-red-500 text-center mb-4">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -91,6 +94,7 @@ export const RegisterForm: React.FC = () => {
             </select>
           </div>
           <div className="text-center">
+            {/* Tombol submit dengan teks yang berubah tergantung pada status isLoading */}
             <button
               type="submit"
               className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 w-full"

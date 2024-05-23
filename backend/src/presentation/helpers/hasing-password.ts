@@ -1,11 +1,14 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 
 export class PasswordHeplper {
-    static hashPassword = async (password: string): Promise<string> => {
-        return await bcrypt.hash(password, 10);
-    }
+  static hashPassword = async (password: string): Promise<string> => {
+    return await bcrypt.hash(password, 10);
+  };
 
-    static comparePassword = async (password: string, hashedPassword: string): Promise<boolean> => {
-        return await bcrypt.compare(password, hashedPassword);
-    }
+  static comparePassword = async (
+    password: string,
+    hashedPassword: string,
+  ): Promise<boolean> => {
+    return await bcrypt.compare(password, hashedPassword);
+  };
 }

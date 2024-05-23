@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 interface ProductFormProps {
     initialValues: {
-        nameProduct: string
-        description: string
-        price: number
-        photoProduct: string
-    }
-    onSubmit: (data: any) => void
-    onCancel: () => void
+        nameProduct: string;
+        description: string;
+        price: number;
+        photoProduct: string;
+    };
+    onSubmit: (data: any) => void;
+    onCancel: () => void;
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({
@@ -16,23 +16,26 @@ const ProductForm: React.FC<ProductFormProps> = ({
     onSubmit,
     onCancel,
 }) => {
-    const [productData, setProductData] = useState(initialValues)
+    const [productData, setProductData] = useState(initialValues);
 
+    // Fungsi untuk menangani perubahan nilai input
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setProductData({ ...productData, [name]: value })
-    }
+        const { name, value } = e.target;
+        setProductData({ ...productData, [name]: value });
+    };
 
+    // Fungsi untuk menangani submit formulir
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-        onSubmit(productData)
-    }
+        e.preventDefault();
+        onSubmit(productData);
+    };
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg relative">
                 <h2 className="text-lg font-semibold mb-4">Product Form</h2>
                 <form onSubmit={handleSubmit}>
+                    {/* Input untuk nama produk */}
                     <input
                         type="text"
                         name="nameProduct"
@@ -41,6 +44,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         placeholder="Name"
                         className="w-full mb-2 p-2 border rounded"
                     />
+                    {/* Input untuk deskripsi produk */}
                     <input
                         type="text"
                         name="description"
@@ -49,6 +53,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         placeholder="Description"
                         className="w-full mb-2 p-2 border rounded"
                     />
+                    {/* Input untuk harga produk */}
                     <input
                         type="number"
                         name="price"
@@ -57,6 +62,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         placeholder="Price"
                         className="w-full mb-2 p-2 border rounded"
                     />
+                    {/* Input untuk foto produk */}
                     <input
                         type="text"
                         name="photoProduct"
@@ -65,6 +71,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         placeholder="Photo"
                         className="w-full mb-4 p-2 border rounded"
                     />
+                    {/* Tombol untuk membatalkan */}
                     <div className="flex justify-end">
                         <button
                             type="button"
@@ -73,6 +80,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                         >
                             Cancel
                         </button>
+                        {/* Tombol untuk menyimpan */}
                         <button
                             type="submit"
                             className="bg-green-500 text-white px-4 py-2 rounded ml-4"
@@ -83,7 +91,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
                 </form>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default ProductForm
+export default ProductForm;

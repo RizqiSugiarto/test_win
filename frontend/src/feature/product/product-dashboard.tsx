@@ -16,11 +16,13 @@ import { RootState, AppDispatch } from '../../store/store';
 import ProductForm from './Component/product-form';
 import { NewProduct } from '../../models/product';
 import Forbidden from './Component/forbidden-resource';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { TokenStructure } from '../../models/auth';
 
 export const ProductDashboard: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
+
+    // Mendapatkan daftar produk dan status loading dari store
     const products = useSelector(
         (state: RootState) => state.product.list.values as IProduct[] || []
     );
@@ -31,6 +33,7 @@ export const ProductDashboard: React.FC = () => {
         (state: RootState) => state.product.save.success,
     );
 
+    // Mendapatkan informasi pengguna saat ini dan status loading dari store
     const currentUser = useSelector(
         (state: RootState) => state.users.selectedUser as IUser | null
     );
@@ -38,24 +41,26 @@ export const ProductDashboard: React.FC = () => {
         (state: RootState) => state.users.isLoading,
     );
 
+    // State untuk menampilkan/menyembunyikan form tambah dan form edit
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(
         null,
     );
 
+    // Mendapatkan token dari cookie
     const token = Cookies.get('accessToken');
 
+    // Efek samping untuk mendapatkan daftar produk saat komponen dimount, serta informasi pengguna saat ini
     useEffect(() => {
         if (token) {
             dispatch(getAllProduct());
             const decodedToken = jwtDecode<TokenStructure>(token);
-            console.log(decodedToken.id, "Decoded Token");
             dispatch(getByIdUser(decodedToken.id));
-            console.log(currentUser?.photoProfile, "GAMBARNYA GINI")
         }
     }, [dispatch, token]);
 
+    // Efek samping untuk memperbarui daftar produk saat aksi pembuatan atau pembaruan berhasil
     useEffect(() => {
         if (success) {
             dispatch(getAllProduct());
@@ -65,6 +70,7 @@ export const ProductDashboard: React.FC = () => {
         }
     }, [success, dispatch]);
 
+    // Fungsi untuk menampilkan form edit produk
     const handleEdit = (id: string) => {
         setShowUpdateForm(true);
         const productToUpdate = products.find((product) => product.id === id);
@@ -73,6 +79,7 @@ export const ProductDashboard: React.FC = () => {
         }
     };
 
+    // Fungsi untuk menghapus produk
     const handleDelete = (id: string) => {
         dispatch(deleteProduct(id.toString()))
             .then(() => {
@@ -80,10 +87,12 @@ export const ProductDashboard: React.FC = () => {
             });
     };
 
+    // Fungsi untuk menampilkan form tambah produk
     const handleCreate = () => {
         setShowCreateForm(true);
     };
 
+    // Fungsi untuk menangani submit form tambah produk
     const handleCreateFormSubmit = (productData: NewProduct) => {
         dispatch(createProduct(productData))
             .then(() => {
@@ -92,6 +101,7 @@ export const ProductDashboard: React.FC = () => {
         handleCloseForm();
     };
 
+    // Fungsi untuk menangani submit form edit produk
     const handleUpdateFormSubmit = (productData: Omit<IProduct, 'id' | 'created_at' | 'updated_at'>) => {
         if (selectedProduct) {
             const updatedProduct: IProduct = {
@@ -107,22 +117,26 @@ export const ProductDashboard: React.FC = () => {
         }
     };
 
+    // Fungsi untuk menutup form tambah/edit produk
     const handleCloseForm = () => {
         setShowCreateForm(false);
         setShowUpdateForm(false);
         setSelectedProduct(null);
     };
 
+    // Menampilkan halaman Forbidden jika tidak ada token
     if (!token) {
         return <Forbidden />;
     }
 
+    // Menampilkan pesan loading jika informasi pengguna sedang dimuat
     if (userLoading || !currentUser) {
         return <div>Loading user info...</div>;
     }
 
     return (
         <div className="flex flex-col min-h-screen">
+            {/* Header dengan informasi pengguna */}
             <div className="bg-green-500 p-3">
                 <div className="flex justify-end">
                     <Link to={'/profile'}>
@@ -135,6 +149,7 @@ export const ProductDashboard: React.FC = () => {
                     <p className="mt-2">{currentUser.name}</p>
                 </div>
             </div>
+            {/* Tombol untuk menampilkan form tambah produk */}
             <div className="flex justify-end mt-6 pr-6">
                 <button
                     className="bg-green-500 p-5 rounded-md"
@@ -143,26 +158,26 @@ export const ProductDashboard: React.FC = () => {
                     Create Product !
                 </button>
             </div>
-            {/* <div className="flex-grow p-4 flex items-center justify-center"> */}
-                {isLoading ? (
-                    <p>Loading...</p>
+            {/* Daftar produk */}
+            {isLoading ? (
+                <p>Loading...</p>
+            ) : (
+                products.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {products.map((product) => (
+                            <ProductCard
+                                key={product.id}
+                                product={product}
+                                onEdit={() => handleEdit(product.id)}
+                                onDelete={() => handleDelete(product.id)}
+                            />
+                        ))}
+                    </div>
                 ) : (
-                    products.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {products.map((product) => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                    onEdit={() => handleEdit(product.id)}
-                                    onDelete={() => handleDelete(product.id)}
-                                />
-                            ))}
-                        </div>
-                    ) : (
-                        <p className="text-center">No products available</p>
-                    )
-                )}
-            {/* </div> */}
+                    <p className="text-center">No products available</p>
+                )
+            )}
+            {/* Form tambah produk */}
             {showCreateForm && (
                 <ProductForm
                     initialValues={{
@@ -175,6 +190,7 @@ export const ProductDashboard: React.FC = () => {
                     onCancel={handleCloseForm}
                 />
             )}
+            {/* Form edit produk */}
             {showUpdateForm && selectedProduct && (
                 <ProductForm
                     initialValues={{

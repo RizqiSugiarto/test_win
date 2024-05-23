@@ -2,6 +2,6 @@ import { DbGetByIdUser } from "../../../../../data/use-cases/users/db-getByIdUse
 import { UserRepository } from "../../../../../infra/postgre_db/repository";
 
 export const makeDbGetByIdUser = (): DbGetByIdUser => {
-    const userRepository = new UserRepository();
-    return new DbGetByIdUser(userRepository);
+  const userRepository = new UserRepository();
+  return new DbGetByIdUser(userRepository);
 };

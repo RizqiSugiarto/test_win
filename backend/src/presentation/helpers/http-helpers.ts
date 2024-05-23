@@ -27,16 +27,14 @@ export class HttpHelper {
   static NO_CONTENT = (): HttpResponse<null> => ({
     statusCode: 204,
   });
-  
+
   static UNAUTHORIZED = (err: Error): HttpResponse<Error> => ({
     statusCode: 401,
     body: err,
   });
-  
+
   static FORBIDEN = (err: Error): HttpResponse<Error> => ({
     statusCode: 403,
     body: err,
   });
-  
-
 }

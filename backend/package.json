@@ -8,7 +8,7 @@
     "build": "tsc",
     "start:dev": "nodemon src/main/server.ts",
     "start:prod": "nodemon ./dist/src/server.js",
-    "doc": "ts-node ./src/main/docs/swaggerDoc.ts"
+    "prettier": "prettier --write ."
   },
   "license": "MIT",
   "devDependencies": {

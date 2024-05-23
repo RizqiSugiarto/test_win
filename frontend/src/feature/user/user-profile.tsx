@@ -4,31 +4,34 @@ import { getByIdUser, updateUser } from './userApi';
 import { RootState, AppDispatch } from '../../store/store';
 import { IUser } from '../../models/users';
 import Cookies from 'js-cookie';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Impor jwtDecode dari paket jwt-decode
 import { TokenStructure } from '../../models/auth';
 
 export const ProfilePage: React.FC = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const user = useSelector((state: RootState) => state.users.selectedUser);
-    const isLoading = useSelector((state: RootState) => state.users.isLoading);
-    const [updatedUser, setUpdatedUser] = useState<IUser | null>(null);
+    const user = useSelector((state: RootState) => state.users.selectedUser); // Pilih pengguna dari toko Redux
+    const isLoading = useSelector((state: RootState) => state.users.isLoading); // Pilih status pengambilan dari toko Redux
+    const [updatedUser, setUpdatedUser] = useState<IUser | null>(null); // State untuk data pengguna yang diperbarui
 
-    const token = Cookies.get('accessToken');
+    const token = Cookies.get('accessToken'); // Dapatkan token akses dari kuki
 
     useEffect(() => {
+        // Ambil data pengguna saat komponen dipasang atau token berubah
         if (token) {
-            const decodedToken = jwtDecode<TokenStructure>(token);
-            dispatch(getByIdUser(decodedToken.id));
+            const decodedToken = jwtDecode<TokenStructure>(token); // Mendekode token untuk mendapatkan id pengguna
+            dispatch(getByIdUser(decodedToken.id)); // Meneruskan tindakan untuk mendapatkan data pengguna berdasarkan id
         }
     }, [dispatch, token]);
 
     useEffect(() => {
+        // Tetapkan state pengguna yang diperbarui ketika data pengguna berubah
         setUpdatedUser(user);
     }, [user]);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     ) => {
+        // Tangani perubahan input dan perbarui state updatedUser sesuai
         const { name, value } = e.target;
         if (updatedUser) {
             setUpdatedUser({
@@ -39,17 +42,19 @@ export const ProfilePage: React.FC = () => {
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        // Tangani pengiriman formulir
         e.preventDefault();
         if (updatedUser) {
-            dispatch(updateUser(updatedUser));
+            dispatch(updateUser(updatedUser)); // Meneruskan tindakan untuk memperbarui data pengguna
         }
     };
 
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-3xl font-bold mb-4">Profile Page</h1>
+            <h1 className="text-3xl font-bold mb-4">Halaman Profil</h1>
             {isLoading && <p>Loading...</p>}
             {!isLoading && user && (
+                // Render data pengguna jika tidak loading dan data pengguna tersedia
                 <div className="flex items-center mb-4">
                     <div>
                         <h2 className="text-xl font-semibold">{user.name}</h2>
@@ -59,10 +64,11 @@ export const ProfilePage: React.FC = () => {
                 </div>
             )}
             {updatedUser && (
+                // Render formulir untuk memperbarui data pengguna jika state updatedUser tersedia
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label htmlFor="name" className="block font-semibold mb-1">
-                            Name
+                            Nama
                         </label>
                         <input
                             type="text"
@@ -88,7 +94,7 @@ export const ProfilePage: React.FC = () => {
                     </div>
                     <div className="mb-4">
                         <label htmlFor="photoProfile" className="block font-semibold mb-1">
-                            Email
+                            Foto Profil
                         </label>
                         <input
                             type="text"
@@ -101,7 +107,7 @@ export const ProfilePage: React.FC = () => {
                     </div>
                     <div className="mb-4">
                         <label htmlFor="gender" className="block font-semibold mb-1">
-                            Gender
+                            Jenis Kelamin
                         </label>
                         <select
                             id="gender"
@@ -110,15 +116,15 @@ export const ProfilePage: React.FC = () => {
                             onChange={handleChange}
                             className="w-full p-2 border rounded"
                         >
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
+                            <option value="Male">Laki-laki</option>
+                            <option value="Female">Perempuan</option>
                         </select>
                     </div>
                     <button
                         type="submit"
                         className="bg-blue-500 text-white px-4 py-2 rounded"
                     >
-                        Save Changes
+                        Simpan Perubahan
                     </button>
                 </form>
             )}
