@@ -23,9 +23,7 @@ export const LoginForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Dispatch the login action with the form data
         await dispatch(login(form));
-        // Navigate to another page after successful login
         navigate("/dashboard");
     };
 
